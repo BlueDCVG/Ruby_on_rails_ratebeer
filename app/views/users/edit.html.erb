@@ -1,4 +1,9 @@
-<h1>Editing user</h1>
+<% if @user.new_record? %>
+  <h1>Editing user</h1>
+  <%else%>
+  <h1>Change password for <%= @user.username %></h1>
+<% end %>
+
 
 <%= render 'form' %>
 
