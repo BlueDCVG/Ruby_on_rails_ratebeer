@@ -29,4 +29,29 @@ class User < ActiveRecord::Base
     end
   end
 
+  def favorite_beer
+    return nil if ratings.empty?
+    ratings.order(score: :desc).limit(1).first.beer
+  end
+
+  def favorite_style
+    return nil if ratings.empty?
+    chunks = Hash.new
+    ratings.chunk{|r| r.beer.style }.each{|styl, rlist| chunks[styl] = rlist.map{|r| r.score }.sum/rlist.count }
+    chunks.max_by{|k,v| v}.first
+  end
+
+  def favorite_brewery
+    return nil if ratings.empty?
+    chunks = Hash.new
+    ratings.chunk{|r| r.beer.brewery }.each{|brew, rlist| chunks[brew] = rlist.map{|r| r.score }.sum/rlist.count }
+    chunks.max_by{|k,v| v}.first
+  end
+
+  def favorite_average ( &block )
+    return nil if ratings.empty?
+    chunks = Hash.new
+    ratings.chunk{|r| r.block.call }.each{|styl, rlist| chunks[styl] = rlist.map{|r| r.score }.sum/rlist.count }
+    chunks.max_by{|k,v| v}.first
+  end
 end

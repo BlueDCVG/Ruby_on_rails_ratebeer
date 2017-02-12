@@ -5,11 +5,22 @@ source 'http://rubygems.org'
 gem 'rails', '4.1.8'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
+
+group :development do
+  gem 'web-console', '~> 2.0'
+end
+
+group :test do
+  gem 'factory_girl_rails'
+  gem 'capybara'
+  gem 'launchy'
+end
+
 group :development, :test do
   gem 'sqlite3'
   gem 'byebug'
   gem 'pry-rails'
-  gem 'web-console', '~> 2.0'
+  gem 'rspec-rails', '~> 3.5'
   #gem "better_errors"
 end
 

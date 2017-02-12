@@ -9,6 +9,15 @@
   <% if @user.ratings.count > 1 %> The average of ratings <%= @user.average_rating.to_s %>
     <% end %>
 </p>
+
+<p>
+  <% if @user.ratings.count > 0 %>
+    Favourite beer: <%= @user.favorite_beer%> <br>
+    By average favourite brewery: <%= @user.favorite_brewery.name%> <br>
+    By average favourite beer style: <%= @user.favorite_style%>
+  <% end %>
+</p>
+
 <% if @user.memberships.empty?  %>
     <p> Doesn't have a membership to any BeerClub yet! </p>
   <% else %>
