@@ -24,4 +24,4 @@
 </p>
 
 <%= link_to 'Edit', edit_beer_path(@beer) %> |
-<%= link_to 'Back', beers_path %>
+<%= link_to 'Delete beer', @beer, method: :delete, data: { confirm: 'Are you sure?' } %>

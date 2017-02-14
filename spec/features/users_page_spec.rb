@@ -33,19 +33,47 @@ describe "User" do
       click_button('Create User')
     }.to change{User.count}.by(1)
   end
+end
 
-  it "sees their ratings" do
+describe "User is able to" do
+  let(:user){FactoryGirl.create(:user) }
+  before :each do
+    beer = FactoryGirl.create(:beer)
+    rating = FactoryGirl.create(:rating, score:10,  beer:beer)
+    rating2 = FactoryGirl.create(:rating, score:20,  beer:beer)
+    user.ratings << rating
+    user.ratings << rating2
+  end
+
+
+it "see their own ratings" do
+  visit user_path(user)
+
+  expect(user.ratings.count).to eq(2)
+  expect(page).to have_content 'anonymous, anonymous, 10'
+  expect(page).to have_content 'anonymous, anonymous, 20'
+  end
+
+  it "not to see others ratings" do
+    user1 = FactoryGirl.create(:user, username:"Matti")
+    visit user_path(user1)
+
+    expect(user.ratings.count).to eq(2)
+    expect(page).to have_content 'Has made 0 ratings.'
+    end
+
+  it "delete own ratings" do
+    sign_in(username:"Pekka", password:"Foobar1")
+    visit user_path(user)
+
+    expect{page.all('a')[page.all('a').count - 4].click}.to change{Rating.count}.by(-1)
+  end
+
+
+  it "show their favourite beer style and favourite brewery" do
     visit user_path(user)
     
-    rating = Rating.new score:10
-    rating2 = Rating.new score:20
-
-    user.ratings << FactoryGirl.create(:rating)
-    user.ratings << FactoryGirl.create(:rating2)
-
-    save_and_open_page
-    expect(user.ratings.count).to eq(2)
-    expect(page).to have_content 'isonenä'
-
+    expect(page).to have_content 'By average favourite brewery: anonymous'
+    expect(page).to have_content 'By average favourite beer style: Lager'
   end
 end

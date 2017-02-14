@@ -13,7 +13,9 @@ describe "Rating" do
   end
 
   it "When given, is registered to the beer and user who is signed in" do
-    doARating
+    visit new_rating_path
+    select('iso 3', from:'rating[beer_id]')
+    fill_in('rating[score]', with:'15')
 
     expect{
       click_button "Create Rating"
@@ -31,12 +33,14 @@ describe "Rating" do
   end
 
   it "Should show many ratings done" do
-    doARating
-    click_button "Create Rating"
-    doARating
-    click_button "Create Rating"
-    doARating
-    click_button "Create Rating"
+    beer = FactoryGirl.create(:beer)
+    rating = FactoryGirl.create(:rating, score:10,  beer:beer)
+    rating2 = FactoryGirl.create(:rating, score:20,  beer:beer)
+    rating3 = FactoryGirl.create(:rating, score:30,  beer:beer)
+
+    user.ratings << rating
+    user.ratings << rating2
+    user.ratings << rating3
 
 
     visit ratings_path
@@ -44,10 +48,4 @@ describe "Rating" do
     expect(page).to have_content 'Number of ratings: 3'
   end
 
-end
-
-def doARating
-  visit new_rating_path
-  select('iso 3', from:'rating[beer_id]')
-  fill_in('rating[score]', with:'15')
 end

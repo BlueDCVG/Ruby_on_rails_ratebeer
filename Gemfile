@@ -14,6 +14,8 @@ group :test do
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'launchy'
+  gem 'rspec-its'
+  gem 'simplecov', require: false
 end
 
 group :development, :test do
