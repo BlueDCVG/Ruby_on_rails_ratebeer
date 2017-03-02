@@ -54,4 +54,8 @@ class User < ActiveRecord::Base
     ratings.chunk{|r| r.block.call }.each{|styl, rlist| chunks[styl] = rlist.map{|r| r.score }.sum/rlist.count }
     chunks.max_by{|k,v| v}.first
   end
+
+  def is_member_of?(beer_club)
+    beer_clubs.include? beer_club
+  end 
 end
